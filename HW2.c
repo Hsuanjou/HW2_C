@@ -3,7 +3,14 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+
 void reddir(char *, int tabs);
+void Size(char *, int tabs);
+void Size_filter(char *temp, int flags, int tabs);
+void type_filter(char *temp, int flags, int tabs);
+void type_filter_D(char *temp, int tabs);
+void type_filter_R(char *temp, int tabs);
+
 char *filetype(unsigned char type)
 {
     char *str;
@@ -58,7 +65,7 @@ int main(int argc, char **argv)
     else
     {
         int svalue = 0;
-        char *fvalue;
+        int fvalue = 0;
         while ((c = getopt(argc, argv, "Ss:f:t")) != -1)
         {
 
@@ -103,7 +110,6 @@ int main(int argc, char **argv)
                 break;
 
             case 'f':
-                fvalue = optarg;
                 if (argc < 2)
                 {
                     printf("Usage: %s <dirname>\n");
@@ -252,7 +258,7 @@ void Size_filter(char *temp, int flags, int tabs)
     }
     closedir(parentDir2);
 }
-void type_filter(char *temp, char *flags, int tabs)
+void type_filter(char *temp, int flags, int tabs)
 {
     char functemp[100];
     int result;
@@ -274,7 +280,7 @@ void type_filter(char *temp, char *flags, int tabs)
             strcat(functemp, "/");
             strcat(functemp, dirent2->d_name);
             lstat(functemp, &buf);
-            char *fvalue = buf.st_mode;
+            int fvalue = buf.st_mode;
             if (fvalue = flags)
             {
                 printf("[%d] %s (%s) %s\n", count, dirent2->d_name, filetype(dirent2->d_type), buf.st_mode);
